@@ -5,9 +5,7 @@ import { useEffect, useState } from 'react';
 import { useFetchWeatherApi } from './hooks/useFetch';
 
 // types
-interface TWeather {
-  base: string,
-}
+import { TWeatherDataApi } from './types/weatherDataApi';
 
 function App() {
   const [locate, setLocate] = useState<string>('London')
@@ -15,10 +13,10 @@ function App() {
     data: weather,
     error,
     isFetching
-  } = useFetchWeatherApi<TWeather>(`/weather?q=${locate}&appid=${process.env.REACT_APP_WEATHER_API_KEY}`)
+  } = useFetchWeatherApi<TWeatherDataApi>(`/weather?q=${locate}&appid=${process.env.REACT_APP_WEATHER_API_KEY}`)
 
   useEffect(() => {
-    console.log(weather)
+    console.log(weather?.coord)
   })
 
   return (
