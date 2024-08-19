@@ -18,10 +18,9 @@ export const useFetchWeatherApi = <T = unknown>(url: string) => {
       .get(url)
       .then((response) => {
         setData(response.data);
-        console.log(url);
       })
       .catch((err) => {
-        console.log(`❗ bad request: ${err}`);
+        console.log(`❗ bad request: ${err} - url: ${url}`);
         setError(true);
       })
       .finally(() => {
