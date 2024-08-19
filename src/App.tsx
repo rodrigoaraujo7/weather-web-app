@@ -1,24 +1,34 @@
-import React, { useEffect } from 'react';
+// react
+import { useEffect, useState } from 'react';
+
+// hooks
+import { useFetchWeatherApi } from './hooks/useFetch';
+
+// types
+interface TWeather {
+  base: string,
+}
 
 function App() {
-  const search = async (city: string) => {
-    try {
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.REACT_APP_WEATHER_API_KEY}`; // Atualize aqui
-
-      const response = await fetch(url);
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  const [locate, setLocate] = useState<string>('London')
+  const {
+    data: weather,
+    error,
+    isFetching
+  } = useFetchWeatherApi<TWeather>(`/weather?q=${locate}&appid=${process.env.REACT_APP_WEATHER_API_KEY}`)
 
   useEffect(() => {
-    search("London");
-  }, []);
+    console.log(weather)
+  })
 
   return (
-    <h1>{process.env.REACT_APP_WEATHER_API_KEY}</h1>
+    <>
+      {isFetching ? (
+        <h1>Loading ...</h1>
+      ) : (
+        <h1>{weather?.base}</h1>
+      )}
+    </>
   );
 }
 
