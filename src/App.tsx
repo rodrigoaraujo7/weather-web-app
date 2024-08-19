@@ -8,23 +8,28 @@ import { useFetchWeatherApi } from './hooks/useFetch';
 import { TWeatherDataApi } from './types/weatherDataApi';
 
 function App() {
-  const [locate, setLocate] = useState<string>('London')
+  const [locate, setLocate] = useState<string>('Londres')
   const {
-    data: weather,
+    data: locateWeather,
     error,
-    isFetching
-  } = useFetchWeatherApi<TWeatherDataApi>(`/weather?q=${locate}&appid=${process.env.REACT_APP_WEATHER_API_KEY}`)
+    isFetching: fetchingLocateWeather
+  } = useFetchWeatherApi<TWeatherDataApi>(`/weather?q=${locate}&lang=pt_br&appid=${process.env.REACT_APP_WEATHER_API_KEY}`)
+
+  const { data: forecastLocateWeather, isFetching: fetchingForecastLocateWeather } = useFetchWeatherApi(
+    `/forecast?lat=${locateWeather?.coord.lat}&lon=${locateWeather?.coord.lon}&appid=${process.env.REACT_APP_WEATHER_API_KEY}`
+  )
 
   useEffect(() => {
-    console.log(weather?.coord)
+    console.log(locateWeather)
+    console.log(forecastLocateWeather)
   })
 
   return (
     <>
-      {isFetching ? (
+      {fetchingLocateWeather ? (
         <h1>Loading ...</h1>
       ) : (
-        <h1>{weather?.base}</h1>
+        <h1>{locateWeather?.weather[0].main}</h1>
       )}
     </>
   );
